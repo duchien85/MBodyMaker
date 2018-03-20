@@ -1,4 +1,4 @@
-package ru.maklas.bodymaker.impl.beans;
+package ru.maklas.bodymaker.impl.dev_beans;
 
 import com.badlogic.gdx.math.Vector2;
 

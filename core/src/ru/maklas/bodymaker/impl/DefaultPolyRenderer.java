@@ -4,9 +4,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import org.jetbrains.annotations.NotNull;
-import ru.maklas.bodymaker.impl.beans.MPoly;
-import ru.maklas.bodymaker.impl.beans.MShape;
-import ru.maklas.bodymaker.impl.beans.Vec;
+import ru.maklas.bodymaker.impl.dev_beans.MPoly;
+import ru.maklas.bodymaker.impl.dev_beans.MShape;
+import ru.maklas.bodymaker.impl.dev_beans.Vec;
 
 public class DefaultPolyRenderer {
 

@@ -1,4 +1,4 @@
-package ru.maklas.bodymaker.impl.beans;
+package ru.maklas.bodymaker.impl.dev_beans;
 
 import com.badlogic.gdx.utils.Array;
 import org.jetbrains.annotations.NotNull;
@@ -68,5 +68,9 @@ public class MPoly implements Iterable<MShape>{
             shape.findInRange(ret, x, y, snapRange);
         }
         return ret;
+    }
+
+    public Array<MShape> getShapes() {
+        return shapes;
     }
 }

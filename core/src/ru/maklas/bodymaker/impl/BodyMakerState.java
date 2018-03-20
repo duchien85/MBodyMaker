@@ -9,9 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import org.jetbrains.annotations.NotNull;
@@ -20,10 +18,11 @@ import ru.maklas.bodymaker.engine.PhysicsDebugSystem;
 import ru.maklas.bodymaker.engine.PhysicsSystem;
 import ru.maklas.bodymaker.engine.RenderingSystem;
 import ru.maklas.bodymaker.engine.rendering.RenderComponent;
-import ru.maklas.bodymaker.impl.beans.MPoly;
-import ru.maklas.bodymaker.impl.beans.MShape;
-import ru.maklas.bodymaker.impl.beans.Vec;
-import ru.maklas.bodymaker.impl.beans.VecUtils;
+import ru.maklas.bodymaker.impl.dev_beans.MPoly;
+import ru.maklas.bodymaker.impl.dev_beans.MShape;
+import ru.maklas.bodymaker.impl.dev_beans.Vec;
+import ru.maklas.bodymaker.impl.dev_beans.VecUtils;
+import ru.maklas.bodymaker.impl.save_beans.BodyPoly;
 import ru.maklas.bodymaker.libs.Utils;
 import ru.maklas.bodymaker.libs.gsm_lib.State;
 import ru.maklas.mengine.Engine;
@@ -140,7 +139,8 @@ public class BodyMakerState extends State implements InputAcceptor, UIController
             break;
             case Input.Keys.N : startNewShape(); addPointAtMouseLocation();
             break;
-
+            case Input.Keys.Q : save();
+            break;
         }
     }
 
@@ -151,9 +151,11 @@ public class BodyMakerState extends State implements InputAcceptor, UIController
         }
     }
 
+    private int shapeNameCounter = 0;
+
     private void startNewShape() {
         if (currentShape == null || currentShape.size() != 0){
-            MShape newShape = new MShape();
+            MShape newShape = new MShape("Shape " + shapeNameCounter++);
             poly.add(newShape);
             selectCurrentShape(newShape);
         }
@@ -305,5 +307,14 @@ public class BodyMakerState extends State implements InputAcceptor, UIController
     public void zoomChanged(int zoom) {
         float newZoom = cam.zoom + 0.1f * zoom;
         cam.zoom = MathUtils.clamp(newZoom, minZoom, maxZoom);
+    }
+
+    public void save(){
+        final BodyPoly bodyPoly = new BodyPoly(poly);
+        System.out.println(bodyPoly);
+        String jsonString  = bodyPoly.toJson();
+        final BodyPoly result = BodyPoly.fromJson(jsonString);
+        System.out.println(result);
+
     }
 }

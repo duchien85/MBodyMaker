@@ -1,4 +1,4 @@
-package ru.maklas.bodymaker.impl.beans;
+package ru.maklas.bodymaker.impl.dev_beans;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
@@ -8,8 +8,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
 
-import static ru.maklas.bodymaker.impl.beans.VecUtils.closestIn;
-import static ru.maklas.bodymaker.impl.beans.VecUtils.closestInRageOf;
+import static ru.maklas.bodymaker.impl.dev_beans.VecUtils.closestIn;
+import static ru.maklas.bodymaker.impl.dev_beans.VecUtils.closestInRageOf;
 
 public class MShape implements Iterable<Vec>{
 
@@ -17,13 +17,19 @@ public class MShape implements Iterable<Vec>{
     private Color lineColor;
     private Color pointColor;
     private Color endLineColor;
+    private String name;
     @Nullable private MPoly poly;
 
-    public MShape() {
+    public MShape(String name) {
+        this.name = name;
         points = new Array<Vec>(true, 8);
         pointColor = Color.GREEN;
         lineColor = Color.WHITE;
         endLineColor = Color.GRAY;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setLineColor(Color lineColor) {
