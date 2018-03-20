@@ -53,4 +53,20 @@ public class MPoly implements Iterable<MShape>{
     public int size() {
         return shapes.size;
     }
+
+    public MShape last() {
+        if (shapes.size > 0)
+            return shapes.get(shapes.size - 1);
+        else
+            return null;
+    }
+
+    public Array<Vec> findInRange(float x, float y, float snapRange) {
+        Array<Vec> ret = new Array<Vec>();
+
+        for (MShape shape : shapes) {
+            shape.findInRange(ret, x, y, snapRange);
+        }
+        return ret;
+    }
 }
