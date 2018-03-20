@@ -25,6 +25,7 @@ public class Utils {
     public static final Array arr = new Array();
     public static final Random rand = new Random();
     private static final Vector2 localVec = new Vector2(0, 0);
+    public static final float scale = 40;
 
     public static Vector2 toScreen(float x, float y, OrthographicCamera cam) {
         return toScreen(localVec.set(x, y), cam);
