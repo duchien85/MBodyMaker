@@ -1,6 +1,7 @@
 package ru.maklas.bodymaker.impl;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -74,6 +75,13 @@ public class PolygonEditorState extends CreationState {
     @Override
     public void leftMouseUp(float x, float y) {
         model.drag.stopAllDrag();
+    }
+
+    @Override
+    public void fileSelected(FileHandle fileHandle) {
+        String jsn = fileHandle.readString();
+        model.poly.load(jsn);
+        model.currentShape = model.poly.last();
     }
 
     @Override

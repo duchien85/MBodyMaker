@@ -112,4 +112,12 @@ public class BodyPoly implements Json.Serializable{
         final BodyPoly bodyPoly = json.fromJson(BodyPoly.class, jsonString);
         return bodyPoly;
     }
+
+    public Array<FixShape> getShapes() {
+        return shapes;
+    }
+
+    public Array<NamedPoint> getPoints() {
+        return points;
+    }
 }

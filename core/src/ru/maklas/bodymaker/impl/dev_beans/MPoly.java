@@ -1,6 +1,7 @@
 package ru.maklas.bodymaker.impl.dev_beans;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
@@ -149,7 +150,25 @@ public class MPoly implements Iterable<MShape>{
 
         return bodyPoly;
     }
+
     public String toJson(){
         return toBeans().toJson();
+    }
+
+    public void load(String json){
+        BodyPoly bodyPoly = BodyPoly.fromJson(json);
+        points.clear();
+        shapes.clear();
+        for (FixShape shape : bodyPoly.getShapes()) {
+            MShape s = new MShape(shape.getName());
+            for (Vector2 p : shape.getPoints()) {
+                s.add(p.x, p.y);
+            }
+            add(s);
+        }
+
+        for (NamedPoint namedPoint : bodyPoly.getPoints()) {
+            addNamedPoint(namedPoint.getName(), namedPoint.x, namedPoint.y);
+        }
     }
 }

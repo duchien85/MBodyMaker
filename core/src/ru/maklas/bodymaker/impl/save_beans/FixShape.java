@@ -86,4 +86,8 @@ public class FixShape implements Json.Serializable{
         }
         this.points = pointsArr;
     }
+
+    public Array<Vector2> getPoints() {
+        return points;
+    }
 }

@@ -14,6 +14,7 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.InputValidator;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
+import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
@@ -41,11 +42,18 @@ public class UI extends Stage {
     VisTextButton openImageButton;
     private int windowCounter = 0;
 
+    final FileChooser chooser;
+    FileTypeFilter imageTypeFilter;
+    FileTypeFilter jsonTypeFilter;
+
     public UI(final UIController controller) {
         super();
         this.controller = controller;
         VisUI.load();
 
+
+        FileChooser.setDefaultPrefsName("maklas");
+        chooser = new FileChooser(FileChooser.Mode.OPEN);
 
         createImageTable();
         createPolyTable();
@@ -71,19 +79,16 @@ public class UI extends Stage {
         imageTable.right().top();
 
 
-        FileTypeFilter typeFilter;
-        typeFilter = new FileTypeFilter(true);
-        typeFilter.addRule("Image files (*.png, *.jpg, *.gif)", "png", "jpg", "gif");
+        imageTypeFilter = new FileTypeFilter(true);
+        imageTypeFilter.addRule("Image files (*.png, *.jpg, *.gif)", "png", "jpg", "gif");
+        jsonTypeFilter = new FileTypeFilter(true);
+        jsonTypeFilter.addRule("Json (*.json)", "json", "jsn");
 
-        FileChooser.setDefaultPrefsName("maklas");
-        final FileChooser chooser = new FileChooser(FileChooser.Mode.OPEN);
         fileSaver = new FileChooser(FileChooser.Mode.SAVE);
-        FileTypeFilter jsonFilter = new FileTypeFilter(true);
-        jsonFilter.addRule("Json (*.json)", "json", "jsn");
-        fileSaver.setFileTypeFilter(jsonFilter);
+        fileSaver.setFileTypeFilter(jsonTypeFilter);
         final float width = Gdx.graphics.getWidth() * 0.6f;
         final float height = Gdx.graphics.getHeight() * 0.9f;
-        chooser.setFileTypeFilter(typeFilter);
+        chooser.setFileTypeFilter(imageTypeFilter);
         chooser.setSelectionMode(FileChooser.SelectionMode.FILES);
         chooser.setMultiSelectionEnabled(false);
         final FileChooserAdapter imageChooserListener = new FileChooserAdapter() {
@@ -102,6 +107,7 @@ public class UI extends Stage {
         openImageButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                chooser.setFileTypeFilter(imageTypeFilter);
                 chooser.setSize(width, height);
                 chooser.setPosition(Gdx.graphics.getWidth() / 2 - width/2, Gdx.graphics.getHeight() / 2 - height/2);
                 windowCounter++;
@@ -124,6 +130,25 @@ public class UI extends Stage {
                 "S - Snap two points together" + '\n' +
                 "Q - Next step";
         polyTable.add(tableWithText(text));
+
+        final float width = Gdx.graphics.getWidth() * 0.6f;
+        final float height = Gdx.graphics.getHeight() * 0.9f;
+
+        VisTextButton openJsonButton = new VisTextButton("Load");
+        openJsonButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                chooser.setFileTypeFilter(jsonTypeFilter);
+                chooser.setSize(width, height);
+                chooser.setPosition(Gdx.graphics.getWidth() / 2 - width/2, Gdx.graphics.getHeight() / 2 - height/2);
+                windowCounter++;
+                addActor(chooser.fadeIn(0.5f));
+                String desktopPath = System.getProperty("user.home") + "/Desktop";
+                chooser.setDirectory(desktopPath);
+            }
+        });
+        polyTable.row();
+        polyTable.add(openJsonButton);
     }
 
     private void createPointsTable() {
