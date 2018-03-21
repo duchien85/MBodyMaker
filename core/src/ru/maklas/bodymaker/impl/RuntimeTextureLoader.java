@@ -1,5 +1,6 @@
 package ru.maklas.bodymaker.impl;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import org.jetbrains.annotations.Nullable;
@@ -28,4 +29,18 @@ public class RuntimeTextureLoader {
         return region;
     }
 
+    public TextureRegion loadFromFile(FileHandle fileHandle) {
+        TextureRegion region = customLoadMap.get(fileHandle.path());
+        if (region == null){
+            final Texture texture;
+            try {
+                texture = new Texture(fileHandle);
+            } catch (Exception e) {
+                return null;
+            }
+            region = new TextureRegion(texture);
+            customLoadMap.put(fileHandle.path(), region);
+        }
+        return region;
+    }
 }

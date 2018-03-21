@@ -76,16 +76,6 @@ public class PhysicsSystem extends CollisionEntitySystem implements EntityListen
         PhysicsComponent cc = entity.get(mapper);
         if (cc != null) {
             cc.body.setUserData(entity);
-            validateFixtureData(entity, cc.body);
-        }
-    }
-
-    private void validateFixtureData(Entity entity, Body body){
-        Array<Fixture> fixtureList = body.getFixtureList();
-        for (Fixture fixture : fixtureList) {
-            if (fixture.getUserData() == null){
-                throw new RuntimeException(entity.getClass().getSimpleName() + " -- " + entity.toString() + " has fixtures without user data!");
-            }
         }
     }
 

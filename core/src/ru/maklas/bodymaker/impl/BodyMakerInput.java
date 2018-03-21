@@ -9,7 +9,7 @@ import ru.maklas.bodymaker.libs.Utils;
 
 public class BodyMakerInput implements InputProcessor{
 
-    private final InputAcceptor acceptor;
+    private InputAcceptor acceptor;
     private final OrthographicCamera cam;
 
     public BodyMakerInput(InputAcceptor acceptor, OrthographicCamera cam) {
@@ -72,5 +72,14 @@ public class BodyMakerInput implements InputProcessor{
     public boolean scrolled(int amount) {
         acceptor.zoomChanged(amount);
         return false;
+    }
+
+
+    public InputAcceptor getAcceptor() {
+        return acceptor;
+    }
+
+    public void setAcceptor(InputAcceptor acceptor) {
+        this.acceptor = acceptor;
     }
 }

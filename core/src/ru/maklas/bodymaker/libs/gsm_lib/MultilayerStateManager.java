@@ -167,7 +167,7 @@ public class MultilayerStateManager implements GameStateManager {
 
     @Override
     public void print(Object msg){
-        print(msg, 1);
+        print(msg, 2.5f);
     }
 
     @Override

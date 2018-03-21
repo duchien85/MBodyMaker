@@ -3,6 +3,7 @@ package ru.maklas.bodymaker.impl.dev_beans;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import org.jetbrains.annotations.Nullable;
+import ru.maklas.bodymaker.impl.save_beans.NamedPoint;
 
 public class VecUtils {
 
@@ -33,6 +34,25 @@ public class VecUtils {
         float dst2ToClosest = closest.dst2(x, y);
 
         for (Vec point : points) {
+            final float dst2 = point.dst2(x, y);
+            if (dst2 < dst2ToClosest){
+                dst2ToClosest = dst2;
+                closest = point;
+            }
+        }
+        return closest;
+    }
+
+    @Nullable
+    public static NamedPoint closestNamed(Array<NamedPoint> points, float x, float y){
+        if (points.size == 0){
+            return null;
+        }
+
+        NamedPoint closest = points.get(0);
+        float dst2ToClosest = closest.dst2(x, y);
+
+        for (NamedPoint point : points) {
             final float dst2 = point.dst2(x, y);
             if (dst2 < dst2ToClosest){
                 dst2ToClosest = dst2;
