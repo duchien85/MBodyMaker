@@ -51,6 +51,41 @@ public class BodyPoly implements Json.Serializable{
     }
 
 
+    public BodyPoly mov(float x, float y){
+        for (FixShape shape : shapes) {
+            shape.mov(x, y);
+        }
+
+        for (NamedPoint point : points) {
+            point.add(x, y);
+        }
+        return this;
+    }
+
+    public BodyPoly movShapes(float x, float y){
+        for (FixShape shape : shapes) {
+            shape.mov(x, y);
+        }
+        return this;
+    }
+
+    public BodyPoly scale(float scalar){
+        for (FixShape shape : shapes) {
+            shape.scl(scalar);
+        }
+
+        for (NamedPoint point : points) {
+            point.scl(scalar);
+        }
+        return this;
+    }
+
+    public NamedPoint getMassCenter(){
+        return findPoint("Mass center");
+    }
+
+
+
     //**********//
     //* JSON *//
     //**********//
