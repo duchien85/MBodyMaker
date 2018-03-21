@@ -21,20 +21,26 @@ public class NamedPoint extends Vector2 implements Json.Serializable{
 
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public NamedPoint(NamedPoint point) {
+        this(point.name, point.x, point.y);
+    }
+
     @Override
     public void write(Json json) {
-        json.writeObjectStart();
         json.writeValue("name", name, String.class);
         json.writeValue("x", x, float.class);
         json.writeValue("y", y, float.class);
-        json.writeObjectEnd();
     }
 
     @Override
     public void read(Json json, JsonValue jsonData) {
         name = jsonData.getString("name");
-        x = jsonData.getFloat("x");
-        y = jsonData.getFloat("y");
+        x = jsonData.get("x").asFloat();
+        y = jsonData.get("y").asFloat();
     }
 
     public String getName() {

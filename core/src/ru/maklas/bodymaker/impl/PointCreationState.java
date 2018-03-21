@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
 import com.kotcrab.vis.ui.util.dialog.InputDialogAdapter;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import ru.maklas.bodymaker.engine.PhysicsComponent;
@@ -110,11 +111,10 @@ public class PointCreationState extends CreationState{
 
                 FileHandle file = files.get(0);
 
-                final BodyPoly bodyPoly = new BodyPoly(model.poly);
-                System.out.println(bodyPoly);
+                final BodyPoly bodyPoly = model.poly.toBeans();
+                System.out.println(new Json().prettyPrint(bodyPoly.toJson()));
                 String jsonString  = bodyPoly.toJson();
                 final BodyPoly result = BodyPoly.fromJson(jsonString);
-                System.out.println(result);
 
                 final Writer writer = file.writer(false, "UTF-8");
                 try {

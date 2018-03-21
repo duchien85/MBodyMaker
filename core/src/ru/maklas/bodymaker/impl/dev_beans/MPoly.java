@@ -5,8 +5,11 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.maklas.bodymaker.impl.save_beans.BodyPoly;
+import ru.maklas.bodymaker.impl.save_beans.FixShape;
 import ru.maklas.bodymaker.impl.save_beans.NamedPoint;
 
 import java.util.Iterator;
@@ -128,5 +131,25 @@ public class MPoly implements Iterable<MShape>{
         body.setLinearVelocity(0, 0);
 
         return body;
+    }
+
+
+    public BodyPoly toBeans(){
+        final BodyPoly bodyPoly = new BodyPoly();
+        bodyPoly.addPoints(points); //named points
+
+        for (MShape shape : shapes) {
+            final FixShape fixShape = new FixShape();
+            fixShape.setName(shape.getName()); //shape names
+            for (Vec vec : shape.getPoints()) {
+                fixShape.addPoint(vec); //shape points
+            }
+            bodyPoly.addShape(fixShape); //shapes
+        }
+
+        return bodyPoly;
+    }
+    public String toJson(){
+        return toBeans().toJson();
     }
 }

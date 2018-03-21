@@ -3,42 +3,36 @@ package ru.maklas.bodymaker.impl.save_beans;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
-import ru.maklas.bodymaker.impl.dev_beans.MPoly;
-import ru.maklas.bodymaker.impl.dev_beans.MShape;
-
-import java.util.Arrays;
 
 public class BodyPoly implements Json.Serializable{
 
-    FixShape[] shapes;
-    boolean hasCenter;
-    float centerX;
-    float centerY;
-
-    public BodyPoly(MPoly poly, float centerX, float centerY) {
-        this.centerX = centerX;
-        this.centerY = centerY;
-        hasCenter = true;
-        setShapes(poly);
-    }
-    public BodyPoly(MPoly poly) {
-        hasCenter = false;
-        setShapes(poly);
-    }
+    Array<FixShape> shapes;
+    Array<NamedPoint> points;
 
     public BodyPoly() {
-
+        shapes = new Array<FixShape>();
+        points = new Array<NamedPoint>();
     }
 
-    void setShapes(MPoly poly){
-        shapes = new FixShape[poly.size()];
-        int counter = 0;
-        for (MShape shape : poly) {
-            shapes[counter++] = new FixShape(shape);
+    //***********//
+    //* SETTERS *//
+    //***********//
+
+    public void addShape(FixShape shape){
+        shapes.add(shape);
+    }
+
+    public void addPoints(Array<NamedPoint> points){
+        for (NamedPoint point : points) {
+            this.points.add(new NamedPoint(point));
         }
     }
 
-    public FixShape find(String name){
+    //***********//
+    //* Getters *//
+    //***********//
+
+    public FixShape findShape(String name){
         for (FixShape shape : shapes) {
             if (shape.getName().equals(name)){
                 return shape;
@@ -47,58 +41,46 @@ public class BodyPoly implements Json.Serializable{
         return null;
     }
 
+    public NamedPoint findPoint(String name){
+        for (NamedPoint point : points) {
+            if (point.getName().equals(name)){
+                return point;
+            }
+        }
+        return null;
+    }
+
+
+    //**********//
+    //* JSON *//
+    //**********//
+
     @Override
     public String toString() {
-        final StringBuilder builder = new StringBuilder()
-                .append("BodyPoly{")
-                .append("shapes=")
-                .append(Arrays.toString(shapes));
-
-        if (hasCenter){
-            builder
-                    .append(", centerX=")
-                    .append(centerX)
-                    .append(", centerY=")
-                    .append(centerY);
-        }
-
-        return builder.append('}').toString();
-    }
-
-    public boolean isHasCenter() {
-        return hasCenter;
-    }
-
-    public float getCenterX() {
-        return centerX;
-    }
-
-    public float getCenterY() {
-        return centerY;
+        return "BodyPoly{" +
+                "shapes=" + shapes +
+                ", points=" + points +
+                '}';
     }
 
     @Override
     public void write(Json json) {
-        if (hasCenter) {
-            json.writeValue("cX", centerX);
-            json.writeValue("cY", centerY);
-        }
+
         json.writeArrayStart("shapes");
         for (FixShape shape : shapes) {
             json.writeValue(shape);
+        }
+        json.writeArrayEnd();
+
+        json.writeArrayStart("points");
+        for (NamedPoint point: points) {
+            json.writeValue(point);
         }
         json.writeArrayEnd();
     }
 
     @Override
     public void read(Json json, JsonValue data) {
-        if (data.has("cX")){
-            this.centerX = data.get("cX").asFloat();
-            this.centerY = data.get("cY").asFloat();
-            this.hasCenter = true;
-        } else {
-            hasCenter = false;
-        }
 
         Array<FixShape> shapesArr = new Array<FixShape>();
         final JsonValue shapes = data.get("shapes");
@@ -107,7 +89,17 @@ public class BodyPoly implements Json.Serializable{
             fixShape.read(json, entry);
             shapesArr.add(fixShape);
         }
-        this.shapes = shapesArr.toArray(FixShape.class);
+        this.shapes = shapesArr;
+
+
+        Array<NamedPoint> pointsArr = new Array<NamedPoint>();
+        final JsonValue points = data.get("points");
+        for (JsonValue entry = points.child; entry != null; entry = entry.next){
+            final NamedPoint nextPoint = new NamedPoint();
+            nextPoint.read(json, entry);
+            pointsArr.add(nextPoint);
+        }
+        this.points = pointsArr;
     }
 
     public String toJson() {

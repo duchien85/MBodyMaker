@@ -5,26 +5,31 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
-import ru.maklas.bodymaker.impl.dev_beans.MShape;
-import ru.maklas.bodymaker.impl.dev_beans.Vec;
 
 import java.util.Arrays;
 
 public class FixShape implements Json.Serializable{
 
     private String name;
-    private Vector2[] points;
+    private Array<Vector2> points;
 
     public FixShape() {
-
+        points = new Array<Vector2>();
     }
 
-    public FixShape(MShape s) {
-        final Array<Vec> points = s.getPoints();
-        this.points = points.toArray(Vector2.class);
-        this.name = s.getName();
+
+    //***********//
+    //* SETTERS *//
+    //***********//
+
+
+    public void setName(String name) {
+        this.name = name;
     }
 
+    public void addPoint(Vector2 vec){
+        points.add(new Vector2(vec));
+    }
 
     public FixShape mov(float x, float y){
         for (Vector2 point : points) {
@@ -42,7 +47,7 @@ public class FixShape implements Json.Serializable{
 
     public PolygonShape toPolygonShape(){
         final PolygonShape shape = new PolygonShape();
-        shape.set(points);
+        shape.set((Vector2[]) points.toArray(Vector2.class));
         return shape;
     }
 
@@ -54,7 +59,7 @@ public class FixShape implements Json.Serializable{
     @Override
     public String toString() {
         return "{name='" + name + '\'' +
-                ", points=" + Arrays.toString(points) +
+                ", points=" + points +
                 '}';
     }
 
@@ -79,6 +84,6 @@ public class FixShape implements Json.Serializable{
         for (JsonValue entry = points.child; entry != null; entry = entry.next){
             pointsArr.add(new Vector2(entry.get("x").asFloat(), entry.get("y").asFloat()));
         }
-        this.points = pointsArr.toArray(Vector2.class);
+        this.points = pointsArr;
     }
 }
