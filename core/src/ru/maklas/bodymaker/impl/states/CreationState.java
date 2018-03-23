@@ -1,7 +1,6 @@
-package ru.maklas.bodymaker.impl;
+package ru.maklas.bodymaker.impl.states;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -9,13 +8,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import org.jetbrains.annotations.Nullable;
+import ru.maklas.bodymaker.impl.DevState;
+import ru.maklas.bodymaker.impl.InputAcceptorAdapter;
+import ru.maklas.bodymaker.impl.Model;
 import ru.maklas.bodymaker.impl.dev_beans.MShape;
 import ru.maklas.bodymaker.impl.dev_beans.Vec;
 import ru.maklas.bodymaker.impl.dev_beans.VecUtils;
 import ru.maklas.bodymaker.impl.save_beans.NamedPoint;
 import ru.maklas.bodymaker.libs.Utils;
 
-public abstract class CreationState extends InputAcceptorAdapter implements UIController{
+public abstract class CreationState extends InputAcceptorAdapter {
 
     protected final Model model;
 
@@ -27,8 +29,6 @@ public abstract class CreationState extends InputAcceptorAdapter implements UICo
 
     public abstract void onLeaveState(DevState newState);
 
-    @Override
-    public void fileSelected(FileHandle fileHandle) {}
 
     public void update(float dt) {
         model.engine.update(dt);
@@ -45,7 +45,6 @@ public abstract class CreationState extends InputAcceptorAdapter implements UICo
     }
 
     public void moveCamera(float dx, float dy){
-        final OrthographicCamera cam = model.cam;
         model.cam.position.add(dx, dy, 0);
         if (model.ru != null) {
             limit(model.cam.position, 0, model.ru.width, 0, model.ru.height);
@@ -77,7 +76,6 @@ public abstract class CreationState extends InputAcceptorAdapter implements UICo
         model.currentState.onEnterState(oldStateEnum);
 
         model.ui.changeState(newState);
-        model.ui.setController(creationState);
         model.bodyMakerInput.setAcceptor(creationState);
     }
 

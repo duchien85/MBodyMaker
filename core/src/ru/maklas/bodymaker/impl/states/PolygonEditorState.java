@@ -1,4 +1,4 @@
-package ru.maklas.bodymaker.impl;
+package ru.maklas.bodymaker.impl.states;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
@@ -9,11 +9,14 @@ import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.util.dialog.InputDialogAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.maklas.bodymaker.impl.DevState;
+import ru.maklas.bodymaker.impl.Model;
+import ru.maklas.bodymaker.impl.controllers.PolygonEditorController;
 import ru.maklas.bodymaker.impl.dev_beans.MShape;
 import ru.maklas.bodymaker.impl.dev_beans.Vec;
 import ru.maklas.bodymaker.impl.dev_beans.VecUtils;
 
-public class PolygonEditorState extends CreationState {
+public class PolygonEditorState extends CreationState implements PolygonEditorController{
 
     public PolygonEditorState(Model model) {
         super(model);
@@ -32,9 +35,6 @@ public class PolygonEditorState extends CreationState {
 
     @Override
     public void keyPressed(int key) {
-        if (model.ui.haveAnyDialogsOpen()){
-            return;
-        }
         switch (key){
             case Input.Keys.A : addShapePointAtLocation(getMouse());
                 break;
@@ -44,7 +44,7 @@ public class PolygonEditorState extends CreationState {
                 break;
             case Input.Keys.N : startNewShape();
                 break;
-            case Input.Keys.Q : changeState(DevState.PointsAndSave);
+            case Input.Keys.Q : changeState(DevState.FixtureEditor);
                 break;
         }
 
@@ -78,7 +78,7 @@ public class PolygonEditorState extends CreationState {
     }
 
     @Override
-    public void fileSelected(FileHandle fileHandle) {
+    public void jsonSelected(FileHandle fileHandle) {
         String jsn = fileHandle.readString();
         model.poly.load(jsn);
         model.currentShape = model.poly.last();
@@ -107,7 +107,7 @@ public class PolygonEditorState extends CreationState {
         if (model.currentShape == null || model.currentShape.size() != 0){
             final Vector2 mouse = new Vector2(getMouse());
 
-            model.ui.nameWindow("Enter name for new shape",
+            model.ui.nameInputWindow("Enter name for new shape",
                     getInvalidNamesForShapes(),
                     new InputDialogAdapter(){
                         @Override

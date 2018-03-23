@@ -11,6 +11,10 @@ import ru.maklas.bodymaker.engine.PhysicsDebugSystem;
 import ru.maklas.bodymaker.engine.PhysicsSystem;
 import ru.maklas.bodymaker.engine.RenderingSystem;
 import ru.maklas.bodymaker.impl.dev_beans.MPoly;
+import ru.maklas.bodymaker.impl.states.FixtureEditorState;
+import ru.maklas.bodymaker.impl.states.ImageSelectionState;
+import ru.maklas.bodymaker.impl.states.PolygonEditorState;
+import ru.maklas.bodymaker.impl.view.UI;
 import ru.maklas.bodymaker.libs.gsm_lib.State;
 import ru.maklas.mengine.Engine;
 import ru.maklas.mengine.Entity;
@@ -23,15 +27,15 @@ public class MainState extends State {
     protected void onCreate() {
         model = new Model();
         model.imaging = new ImageSelectionState(model);
-        model.polyChange = new PolygonEditorState(model);
-        model.pointCreationAndSave = new PointCreationState(model);
-        model.currentStateEnum = DevState.Image;
+        model.polyEditor = new PolygonEditorState(model);
+        model.fixtureEditor = new FixtureEditorState(model);
+        model.currentStateEnum = DevState.ImageLoading;
         model.currentState = model.imaging;
 
         model.cam = new OrthographicCamera(1280, 800);
         model.bodyMakerInput = new BodyMakerInput(model.imaging, model.cam);
-        model.ui = new UI(model.imaging);
-        model.input = new InputMultiplexer(model.bodyMakerInput, model.ui);
+        model.ui = new UI(model.imaging, model.polyEditor, model.fixtureEditor);
+        model.input = new InputMultiplexer(model.ui, model.bodyMakerInput);
         model.engine = new Engine();
         model.world = new World(new Vector2(0, 0), true);
         model.debug = new PhysicsDebugSystem(model.world, model.cam);

@@ -9,6 +9,9 @@ public class BodyPoly implements Json.Serializable{
     Array<FixShape> shapes;
     Array<NamedPoint> points;
 
+    public static final String MASS_CENTER = "Mass center";
+    public static final String ORIGIN = "Origin";
+
     public BodyPoly() {
         shapes = new Array<FixShape>();
         points = new Array<NamedPoint>();
@@ -115,7 +118,7 @@ public class BodyPoly implements Json.Serializable{
     }
 
     @Override
-    public void read(Json json, JsonValue data) {
+    public void read(Json json, final JsonValue data) {
 
         Array<FixShape> shapesArr = new Array<FixShape>();
         final JsonValue shapes = data.get("shapes");

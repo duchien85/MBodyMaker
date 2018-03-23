@@ -1,4 +1,4 @@
-package ru.maklas.bodymaker.impl;
+package ru.maklas.bodymaker.impl.states;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
@@ -6,11 +6,15 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.kotcrab.vis.ui.util.dialog.InputDialogAdapter;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import ru.maklas.bodymaker.engine.PhysicsComponent;
+import ru.maklas.bodymaker.impl.DevState;
+import ru.maklas.bodymaker.impl.Model;
+import ru.maklas.bodymaker.impl.controllers.FixtureEditorController;
 import ru.maklas.bodymaker.impl.dev_beans.MShape;
 import ru.maklas.bodymaker.impl.dev_beans.Vec;
 import ru.maklas.bodymaker.impl.save_beans.BodyPoly;
@@ -20,9 +24,9 @@ import ru.maklas.mengine.ComponentMapper;
 import java.io.IOException;
 import java.io.Writer;
 
-public class PointCreationState extends CreationState{
+public class FixtureEditorState extends CreationState implements FixtureEditorController{
 
-    public PointCreationState(Model model) {
+    public FixtureEditorState(Model model) {
         super(model);
     }
 
@@ -59,9 +63,6 @@ public class PointCreationState extends CreationState{
 
     @Override
     public void keyPressed(int key) {
-        if (model.ui.haveAnyDialogsOpen()){
-            return;
-        }
         switch (key) {
             case Input.Keys.A: addNamedPointAtMouseLocation();
                 break;
@@ -150,7 +151,7 @@ public class PointCreationState extends CreationState{
         Array<String> namedPointNames = getNamedPointNames();
         final Vector2 mouse = new Vector2(getMouse());
 
-        model.ui.nameWindow("Enter name for point: ",
+        model.ui.nameInputWindow("Enter name for the point",
                 namedPointNames,
                 new InputDialogAdapter(){
                     @Override
@@ -167,7 +168,7 @@ public class PointCreationState extends CreationState{
 
     ComponentMapper<PhysicsComponent> mapper = ComponentMapper.of(PhysicsComponent.class);
     private void createCenterOfMassPoint(){
-        final String mass_center = "Mass center";
+        final String mass_center = BodyPoly.MASS_CENTER;
 
         final Body body = model.entity.get(mapper).body;
         Vector2 center = body.getWorldPoint(body.getMassData().center);
@@ -183,7 +184,7 @@ public class PointCreationState extends CreationState{
     }
 
     private void createOriginPoint(){
-        final String origin_name = "Origin";
+        final String origin_name = BodyPoly.ORIGIN;
 
         final Array<NamedPoint> namedPoints = model.poly.getNamedPoints();
         Vector2 center = model.entity.get(mapper).body.getPosition();
@@ -206,4 +207,19 @@ public class PointCreationState extends CreationState{
         }
     }
 
+
+    @Override
+    public void densityChanged(Fixture f, float density) {
+
+    }
+
+    @Override
+    public void restitutionChanged(Fixture f, float restitution) {
+
+    }
+
+    @Override
+    public void frictionChanged(Fixture f, float friction) {
+
+    }
 }

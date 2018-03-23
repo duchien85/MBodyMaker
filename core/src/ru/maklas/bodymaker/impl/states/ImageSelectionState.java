@@ -1,14 +1,15 @@
-package ru.maklas.bodymaker.impl;
+package ru.maklas.bodymaker.impl.states;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import ru.maklas.bodymaker.engine.rendering.RenderComponent;
 import ru.maklas.bodymaker.engine.rendering.RenderUnit;
-import ru.maklas.bodymaker.impl.dev_beans.Vec;
+import ru.maklas.bodymaker.impl.DevState;
+import ru.maklas.bodymaker.impl.Model;
+import ru.maklas.bodymaker.impl.controllers.ImageLoadingController;
 
-public class ImageSelectionState extends CreationState {
+public class ImageSelectionState extends CreationState implements ImageLoadingController {
 
     public ImageSelectionState(Model model) {
         super(model);
@@ -16,12 +17,12 @@ public class ImageSelectionState extends CreationState {
 
     @Override
     public void onEnterState(DevState oldState) {
-        model.ui.changeState(DevState.Image);
+        model.ui.changeState(DevState.ImageLoading);
         model.drag.stopAllDrag();
     }
 
     @Override
-    public void fileSelected(FileHandle fileHandle) {
+    public void imageSelected(FileHandle fileHandle) {
         final TextureRegion region = model.loader.loadFromFile(fileHandle);
         if (region == null){
             model.gsm.print("Bad file: " + fileHandle.name());
@@ -33,7 +34,7 @@ public class ImageSelectionState extends CreationState {
         model.entity.add(rc);
         moveCamera(ru.width/2, ru.height/2);
 
-        changeState(DevState.Poly);
+        changeState(DevState.PolygonEditor);
     }
 
 

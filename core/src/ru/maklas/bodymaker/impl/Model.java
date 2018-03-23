@@ -10,6 +10,11 @@ import ru.maklas.bodymaker.engine.PhysicsDebugSystem;
 import ru.maklas.bodymaker.engine.rendering.RenderUnit;
 import ru.maklas.bodymaker.impl.dev_beans.MPoly;
 import ru.maklas.bodymaker.impl.dev_beans.MShape;
+import ru.maklas.bodymaker.impl.states.CreationState;
+import ru.maklas.bodymaker.impl.states.FixtureEditorState;
+import ru.maklas.bodymaker.impl.states.ImageSelectionState;
+import ru.maklas.bodymaker.impl.states.PolygonEditorState;
+import ru.maklas.bodymaker.impl.view.UI;
 import ru.maklas.bodymaker.libs.gsm_lib.GameStateManager;
 import ru.maklas.mengine.Engine;
 import ru.maklas.mengine.Entity;
@@ -35,20 +40,20 @@ public class Model {
     @Nullable public RenderUnit ru;
 
     public DevState currentStateEnum;
-    public CreationState imaging;
-    public CreationState polyChange;
-    public CreationState pointCreationAndSave;
-    public CreationState currentState;
+    public ImageSelectionState imaging;
+    public PolygonEditorState polyEditor;
+    public FixtureEditorState fixtureEditor;
+    public ru.maklas.bodymaker.impl.states.CreationState currentState;
 
 
-    Color defaultLineColor = Color.WHITE;
-    Color defaultPointColor = Color.YELLOW;
+    public Color defaultLineColor = Color.WHITE;
+    public Color defaultPointColor = Color.YELLOW;
 
-    Color selectedLineColor = Color.CYAN;
-    Color selectedPointColor = Color.GREEN;
+    public Color selectedLineColor = Color.CYAN;
+    public Color selectedPointColor = Color.GREEN;
 
-    Color defaultEndLineColor = Color.WHITE;
-    Color selectedEndLineColor = Color.LIGHT_GRAY;
+    public Color defaultEndLineColor = Color.WHITE;
+    public Color selectedEndLineColor = Color.LIGHT_GRAY;
 
 
     public float maxZoom = 4f;
@@ -56,14 +61,14 @@ public class Model {
     public float maxDstToHighlight = 8;
 
 
-    CreationState getCreationState(DevState state){
+    public CreationState getCreationState(DevState state){
         switch (state){
-            case Image:
+            case ImageLoading:
                 return imaging;
-            case Poly:
-                return polyChange;
-            case PointsAndSave:
-                return pointCreationAndSave;
+            case PolygonEditor:
+                return polyEditor;
+            case FixtureEditor:
+                return fixtureEditor;
         }
         return null;
     }
