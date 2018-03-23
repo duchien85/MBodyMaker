@@ -48,7 +48,7 @@ public class DefaultPolyRenderer {
         if (renderNamedPoints) renderNamedPoints(poly);
 
         renderer.end();
-        if (batch != null){
+        if (renderNamedPoints && batch != null){
             renderNamedPointsNames(poly, batch);
         }
     }

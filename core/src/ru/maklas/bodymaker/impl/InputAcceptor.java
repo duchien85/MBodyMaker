@@ -2,7 +2,9 @@ package ru.maklas.bodymaker.impl;
 
 public interface InputAcceptor {
 
-    void keyPressed(int key);
+    void keyDown(int key);
+
+    void keyUp(int key);
 
     void dragged(float dx, float dy, int button);
 

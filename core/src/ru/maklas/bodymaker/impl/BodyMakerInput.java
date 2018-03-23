@@ -19,12 +19,13 @@ public class BodyMakerInput implements InputProcessor{
 
     @Override
     public boolean keyDown(int keycode) {
+        acceptor.keyDown(keycode);
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        acceptor.keyPressed(keycode);
+        acceptor.keyUp(keycode);
         return false;
     }
 

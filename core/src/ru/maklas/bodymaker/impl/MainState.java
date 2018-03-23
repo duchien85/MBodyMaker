@@ -34,7 +34,7 @@ public class MainState extends State {
 
         model.cam = new OrthographicCamera(1280, 800);
         model.bodyMakerInput = new BodyMakerInput(model.imaging, model.cam);
-        model.ui = new UI(model.imaging, model.polyEditor, model.fixtureEditor);
+        model.ui = new UI(model.imaging, model.polyEditor, model.fixtureEditor, model.fixtureEditor);
         model.input = new InputMultiplexer(model.ui, model.bodyMakerInput);
         model.engine = new Engine();
         model.world = new World(new Vector2(0, 0), true);

@@ -10,4 +10,6 @@ public interface FixtureEditorController {
 
     void frictionChanged(Fixture f, float friction);
 
+    void sensorChanged(Fixture f, boolean isSensor);
+
 }

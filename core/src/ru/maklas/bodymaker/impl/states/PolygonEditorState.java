@@ -25,7 +25,7 @@ public class PolygonEditorState extends CreationState implements PolygonEditorCo
 
     @Override
     public void onEnterState(DevState oldState) {
-
+        model.polyRenderer.setRenderNamedPoints(false);
     }
 
     @Override
@@ -34,20 +34,29 @@ public class PolygonEditorState extends CreationState implements PolygonEditorCo
     }
 
     @Override
-    public void keyPressed(int key) {
+    public void keyDown(int key) {
         switch (key){
-            case Input.Keys.A : addShapePointAtLocation(getMouse());
+            case Input.Keys.A : if (model.currentShape != null) addShapePointAtLocation(getMouse());
                 break;
             case Input.Keys.D : deleteShapePointUnder(getMouse());
                 break;
             case Input.Keys.S : snapTwoPointsUnder(getMouse());
                 break;
-            case Input.Keys.N : startNewShape();
+            case Input.Keys.N : if (model.currentShape != null) startNewShape();
                 break;
             case Input.Keys.Q : changeState(DevState.FixtureEditor);
                 break;
         }
+    }
 
+    @Override
+    public void keyUp(int key) {
+        switch (key){
+            case Input.Keys.A : if (model.currentShape == null) addShapePointAtLocation(getMouse());
+                break;
+            case Input.Keys.N : if (model.currentShape == null) startNewShape();
+                break;
+        }
     }
 
     @Override

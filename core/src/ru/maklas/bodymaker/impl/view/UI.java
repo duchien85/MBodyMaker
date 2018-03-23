@@ -8,13 +8,13 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.InputValidator;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
-import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserListener;
 import com.kotcrab.vis.ui.widget.file.FileTypeFilter;
 import com.kotcrab.vis.ui.widget.file.internal.FileListAdapter;
 import org.jetbrains.annotations.NotNull;
 import ru.maklas.bodymaker.impl.DevState;
+import ru.maklas.bodymaker.impl.controllers.BodyEditorController;
 import ru.maklas.bodymaker.impl.controllers.FixtureEditorController;
 import ru.maklas.bodymaker.impl.controllers.ImageLoadingController;
 import ru.maklas.bodymaker.impl.controllers.PolygonEditorController;
@@ -32,14 +32,14 @@ public class UI extends Stage {
     private PolygonEditorUI polygonEditorTable;
     private FixtureEditorUI fixtureEditorTable;
 
-    public UI(ImageLoadingController imageController, PolygonEditorController polygonEditorController, FixtureEditorController fixtureEditorController) {
+    public UI(ImageLoadingController imageController, PolygonEditorController polygonEditorController, FixtureEditorController fixtureEditorController, BodyEditorController bodyController) {
         super();
         FileChooser.setDefaultPrefsName("maklas");
         VisUI.load();
 
         imageLoadingTable = new ImageLoadingUI(imageController);
         polygonEditorTable = new PolygonEditorUI(polygonEditorController);
-        fixtureEditorTable = new FixtureEditorUI(fixtureEditorController);
+        fixtureEditorTable = new FixtureEditorUI(fixtureEditorController, bodyController);
 
 
         final FileTypeFilter jsonTypeFilter = new FileTypeFilter(true);
@@ -126,4 +126,7 @@ public class UI extends Stage {
         Dialogs.showErrorDialog(this, "Error: " + e);
     }
 
+    public FixtureEditorUI getFixtureView() {
+        return fixtureEditorTable;
+    }
 }

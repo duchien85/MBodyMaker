@@ -11,9 +11,11 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.kotcrab.vis.ui.util.dialog.InputDialogAdapter;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
+import org.jetbrains.annotations.Nullable;
 import ru.maklas.bodymaker.engine.PhysicsComponent;
 import ru.maklas.bodymaker.impl.DevState;
 import ru.maklas.bodymaker.impl.Model;
+import ru.maklas.bodymaker.impl.controllers.BodyEditorController;
 import ru.maklas.bodymaker.impl.controllers.FixtureEditorController;
 import ru.maklas.bodymaker.impl.dev_beans.MShape;
 import ru.maklas.bodymaker.impl.dev_beans.Vec;
@@ -24,7 +26,7 @@ import ru.maklas.mengine.ComponentMapper;
 import java.io.IOException;
 import java.io.Writer;
 
-public class FixtureEditorState extends CreationState implements FixtureEditorController{
+public class FixtureEditorState extends CreationState implements FixtureEditorController, BodyEditorController {
 
     public FixtureEditorState(Model model) {
         super(model);
@@ -37,6 +39,9 @@ public class FixtureEditorState extends CreationState implements FixtureEditorCo
         model.polyRenderer.setRenderNamedPoints(true);
         model.polyRenderer.setRenderLines(false);
         resetShapeColors();
+        createCenterOfMassPoint();
+        createOriginPoint();
+        model.ui.getFixtureView().getBodyView().setMass(model.body.getMassData().mass);
     }
 
     @Override
@@ -62,7 +67,7 @@ public class FixtureEditorState extends CreationState implements FixtureEditorCo
     }
 
     @Override
-    public void keyPressed(int key) {
+    public void keyDown(int key) {
         switch (key) {
             case Input.Keys.A: addNamedPointAtMouseLocation();
                 break;
@@ -92,8 +97,11 @@ public class FixtureEditorState extends CreationState implements FixtureEditorCo
     public void leftMouseDown(float x, float y) {
         model.drag.stopAllDrag();
         final NamedPoint hoverPoint = getHoveredPointNamedOnly(x, y);
-        if (hoverPoint != null && hoverPoint.dst(x, y) < model.maxDstToHighlight) {
+        if (hoverPoint != null && hoverPoint.dst(x, y) < model.maxDstToHighlight && pointCanBeChanged(hoverPoint)) {
             model.drag.startNamedPointDrag(hoverPoint);
+        } else {
+            final Fixture fixture = testFixture(x, y);
+            selectCurrentFixture(fixture);
         }
     }
 
@@ -131,6 +139,10 @@ public class FixtureEditorState extends CreationState implements FixtureEditorCo
 
 
 
+
+
+
+
     public Array<String> getNamedPointNames() {
         final Array<String> names = new Array<String>();
         for (NamedPoint namedPoint : model.poly.getNamedPoints()) {
@@ -142,9 +154,13 @@ public class FixtureEditorState extends CreationState implements FixtureEditorCo
 
     private void removeNamedPointAt(Vector2 mouse) {
         final NamedPoint hovered = getHoveredPointNamedOnly(mouse);
-        if (hovered != null){
+        if (hovered != null && pointCanBeChanged(hovered)){
             model.poly.remove(hovered);
         }
+    }
+
+    private boolean pointCanBeChanged(NamedPoint point) {
+        return !point.getName().equals(BodyPoly.MASS_CENTER) && !point.getName().equals(BodyPoly.ORIGIN);
     }
 
     private void addNamedPointAtMouseLocation() {
@@ -163,6 +179,7 @@ public class FixtureEditorState extends CreationState implements FixtureEditorCo
 
     private void addBodyToEntity(){
         Body body = model.poly.createBody(model.world);
+        model.body = body;
         model.entity.add(new PhysicsComponent(body));
     }
 
@@ -208,18 +225,58 @@ public class FixtureEditorState extends CreationState implements FixtureEditorCo
     }
 
 
+    private Fixture testFixture(float x, float y){
+        final Array<Fixture> fixtureList = model.body.getFixtureList();
+        for (Fixture fixture : fixtureList) {
+            if (fixture.testPoint(x, y)){
+                return fixture;
+            }
+        }
+
+        return null;
+    }
+
+    private void selectCurrentFixture(@Nullable Fixture fixture) {
+        model.currentFixture = fixture;
+        if (fixture == null) {
+            model.ui.getFixtureView().hideFixtureData();
+        } else {
+            model.ui.getFixtureView().showFixtureData(fixture);
+        }
+    }
+
+    private void updateMassData() {
+        model.body.resetMassData();
+        model.ui.getFixtureView().getBodyView().setMass(model.body.getMassData().mass / (scale * scale));
+        createCenterOfMassPoint();
+    }
+
     @Override
     public void densityChanged(Fixture f, float density) {
-
+        f.setDensity(density);
+        updateMassData();
     }
 
     @Override
     public void restitutionChanged(Fixture f, float restitution) {
-
+        f.setRestitution(restitution);
     }
 
     @Override
     public void frictionChanged(Fixture f, float friction) {
+        f.setFriction(friction);
+    }
 
+    @Override
+    public void sensorChanged(Fixture f, boolean isSensor) {
+        f.setSensor(isSensor);
+    }
+
+    float scale = 1;
+
+    @Override
+    public void scaleChanged(float scale) {
+        this.scale = scale;
+        updateMassData();
     }
 }

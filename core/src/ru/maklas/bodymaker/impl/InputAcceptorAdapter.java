@@ -3,9 +3,15 @@ package ru.maklas.bodymaker.impl;
 public class InputAcceptorAdapter implements InputAcceptor {
 
     @Override
-    public void keyPressed(int key) {
+    public void keyDown(int key) {
 
     }
+
+    @Override
+    public void keyUp(int key) {
+
+    }
+
 
     @Override
     public void dragged(float dx, float dy, int button) {

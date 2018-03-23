@@ -3,6 +3,7 @@ package ru.maklas.bodymaker.impl.dev_beans;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
@@ -22,6 +23,7 @@ public class MShape implements Iterable<Vec>{
     private Color endLineColor;
     private String name;
     @Nullable private MPoly poly;
+    @Nullable private Fixture fixture;
 
     public MShape(String name) {
         this.name = name;
@@ -57,6 +59,15 @@ public class MShape implements Iterable<Vec>{
 
     public Color getPointColor() {
         return pointColor;
+    }
+
+    @Nullable
+    public Fixture getFixture() {
+        return fixture;
+    }
+
+    public void setFixture(@Nullable Fixture fixture) {
+        this.fixture = fixture;
     }
 
     public void add(float x, float y){
@@ -209,13 +220,15 @@ public class MShape implements Iterable<Vec>{
         return false;
     }
 
-    public void createFixture(Body body) {
+    public Fixture createFixture(Body body) {
         final PolygonShape shape = new PolygonShape();
         final Vector2[] points = this.points.toArray(Vector2.class);
         shape.set(points);
         FixtureDef fDef = new FixtureDef();
         fDef.shape = shape;
         fDef.density = 1;
-        body.createFixture(fDef);
+        final Fixture fixture = body.createFixture(fDef);
+        this.fixture = fixture;
+        return fixture;
     }
 }

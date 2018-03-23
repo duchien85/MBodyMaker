@@ -142,6 +142,10 @@ public class MPoly implements Iterable<MShape>{
         for (MShape shape : shapes) {
             final FixShape fixShape = new FixShape();
             fixShape.setName(shape.getName()); //shape names
+            fixShape.setDensity(shape.getFixture().getDensity());
+            fixShape.setRestitution(shape.getFixture().getRestitution());
+            fixShape.setFriction(shape.getFixture().getFriction());
+            fixShape.setSensor(shape.getFixture().isSensor());
             for (Vec vec : shape.getPoints()) {
                 fixShape.addPoint(vec); //shape points
             }
