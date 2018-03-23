@@ -73,6 +73,9 @@ public class PolygonEditorState extends CreationState implements PolygonEditorCo
 
     @Override
     public void leftMouseDown(float x, float y) {
+        if (model.drag.isDraggingPoint()){
+            checkNonConvexity(model.currentShape);
+        }
         model.drag.stopAllDrag();
         final Vec hoverPoint = getHoveredPointShapesOnly(x, y);
         if (hoverPoint != null) {

@@ -3,6 +3,7 @@ package ru.maklas.bodymaker.impl.view;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.spinner.SimpleFloatSpinnerModel;
 import com.kotcrab.vis.ui.widget.spinner.Spinner;
@@ -24,6 +25,7 @@ public class FixtureInfoPanel extends VisTable {
         Spinner densitySpinner = new Spinner("Density: ", densityModel);
         Spinner restitutionSpinner = new Spinner("Restitution: ", restitutionModel);
         Spinner frictionSpinner = new Spinner("Friction: ", frictionModel);
+        final VisCheckBox sensorBox = new VisCheckBox("Sensor: ", false);
 
         densitySpinner.addListener(new ChangeListener() {
             @Override
@@ -43,11 +45,19 @@ public class FixtureInfoPanel extends VisTable {
                 controller.frictionChanged(fixture, frictionModel.getValue());
             }
         });
+        sensorBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                controller.sensorChanged(fixture, sensorBox.isChecked());
+            }
+        });
 
-        add(densitySpinner);
+        add(densitySpinner).left();
         row();
-        add(restitutionSpinner);
+        add(restitutionSpinner).left();
         row();
-        add(frictionSpinner);
+        add(frictionSpinner).left();
+        row();
+        add(sensorBox).left();
     }
 }

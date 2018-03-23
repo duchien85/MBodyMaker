@@ -16,6 +16,7 @@ public class BodyView extends VisTable {
 
     public BodyView(final BodyEditorController controller) {
         super();
+        left();
         this.controller = controller;
 
         bodyMassLabel = new VisLabel("Body mass: " + 0);
@@ -23,9 +24,9 @@ public class BodyView extends VisTable {
         final SimpleFloatSpinnerModel scaleModel;
         scaleModel = new SimpleFloatSpinnerModel(1, 0, 150, 0.05f);
         Spinner spinner = new Spinner("World scale: ", scaleModel);
-        add(spinner);
+        add(spinner).left();
         row();
-        add(bodyMassLabel);
+        add(bodyMassLabel).left();
         spinner.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
