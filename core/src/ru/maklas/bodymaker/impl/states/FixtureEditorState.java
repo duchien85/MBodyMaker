@@ -122,6 +122,8 @@ public class FixtureEditorState extends CreationState implements FixtureEditorCo
 
                 final BodyPoly bodyPoly = model.poly.toBeans();
                 System.out.println(new Json().prettyPrint(bodyPoly.toJson()));
+                System.out.println("-------------");
+                bodyPoly.printToCode();
                 String jsonString  = bodyPoly.toJson();
                 final BodyPoly result = BodyPoly.fromJson(jsonString);
 

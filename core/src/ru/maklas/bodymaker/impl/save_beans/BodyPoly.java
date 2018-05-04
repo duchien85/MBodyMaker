@@ -1,5 +1,6 @@
 package ru.maklas.bodymaker.impl.save_beans;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
@@ -157,5 +158,56 @@ public class BodyPoly implements Json.Serializable{
 
     public Array<NamedPoint> getPoints() {
         return points;
+    }
+
+    public void printToCode() {
+
+        //Shape declaration
+        for (FixShape shape : shapes) {
+            System.out.println("PolygonShape " + shape.getName() + "Shape = new PolygonShape();");
+        }
+
+        System.out.println();
+
+        //Array fill
+        for (FixShape shape : shapes) {
+            String arrName = shape.getName() + "Points";
+            System.out.println("Array<Vector2> " + arrName + " = new Array<>();");
+            Array<Vector2> points = shape.getPoints();
+
+            for (Vector2 point : points) {
+                System.out.println(arrName + ".add(new Vector2(" + point.x + "f, " + point.y + "f));");
+            }
+
+            System.out.println();
+        }
+
+
+        //ALL in one Array
+        System.out.println("Array<Vector2> all = new Array<>();");
+        for (FixShape shape : shapes) {
+            System.out.println("all.addAll(" + shape.getName() + "Points" + ");");
+        }
+        System.out.println();
+
+
+        for (FixShape shape : shapes) {
+            String arrName = shape.getName() + "Points";
+            String shapeName = shape.getName() + "Shape";
+
+            System.out.println(shapeName + ".set(" + arrName + ".toArray(Vector2.class));");
+        }
+
+        System.out.println();
+        System.out.println();
+
+        StringBuilder nameBuilder = new StringBuilder(shapes.get(0).getName() + "Shape");
+
+        for (int i = 1; i < shapes.size; i++) {
+            nameBuilder.append(", ").append(shapes.get(i).getName()).append("Shape");
+        }
+
+        System.out.println("return Array.with(" + nameBuilder.toString() + ");");
+
     }
 }
