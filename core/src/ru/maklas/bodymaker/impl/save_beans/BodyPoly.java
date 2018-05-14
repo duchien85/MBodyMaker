@@ -162,6 +162,16 @@ public class BodyPoly implements Json.Serializable{
 
     public void printToCode() {
 
+        //Point declarations
+        for (NamedPoint point : points) {
+            if (point.getName().equalsIgnoreCase("origin")){
+                continue;
+            }
+            System.out.println("Vector2 " + point.getName().replaceAll(" ", "_") + " = new Vector2(" + point.x + "f, " + point.y + "f);");
+        }
+        System.out.println();
+
+
         //Shape declaration
         for (FixShape shape : shapes) {
             System.out.println("PolygonShape " + shape.getName() + "Shape = new PolygonShape();");
@@ -184,7 +194,7 @@ public class BodyPoly implements Json.Serializable{
 
 
         //ALL in one Array
-        System.out.println("Array<Vector2> all = new Array<>();");
+        System.out.println("MArray<Vector2> all = new MArray<>();");
         for (FixShape shape : shapes) {
             System.out.println("all.addAll(" + shape.getName() + "Points" + ");");
         }
@@ -207,7 +217,7 @@ public class BodyPoly implements Json.Serializable{
             nameBuilder.append(", ").append(shapes.get(i).getName()).append("Shape");
         }
 
-        System.out.println("return Array.with(" + nameBuilder.toString() + ");");
+        System.out.println("return MArray.with(" + nameBuilder.toString() + ");");
 
     }
 }
