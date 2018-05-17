@@ -34,6 +34,17 @@ task dist(type: Jar) {
     }
 }
 
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Jar File Example',
+                'Implementation-Version': version,
+                'Main-Class': project.mainClassName
+    }
+    baseName = project.name + '-dependencies'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
 dist.dependsOn classes
 
 eclipse {
