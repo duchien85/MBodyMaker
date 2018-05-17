@@ -1,7 +1,6 @@
 package ru.maklas.bodymaker.impl.states;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -14,8 +13,8 @@ import ru.maklas.bodymaker.impl.Model;
 import ru.maklas.bodymaker.impl.dev_beans.MShape;
 import ru.maklas.bodymaker.impl.dev_beans.Vec;
 import ru.maklas.bodymaker.impl.dev_beans.VecUtils;
-import ru.maklas.bodymaker.impl.save_beans.NamedPoint;
 import ru.maklas.bodymaker.libs.Utils;
+import ru.maklas.bodymaker.runtime.save_beans.NamedPoint;
 
 public abstract class CreationState extends InputAcceptorAdapter {
 

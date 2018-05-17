@@ -1,7 +1,7 @@
 package ru.maklas.bodymaker.impl;
 
 import ru.maklas.bodymaker.impl.dev_beans.Vec;
-import ru.maklas.bodymaker.impl.save_beans.NamedPoint;
+import ru.maklas.bodymaker.runtime.save_beans.NamedPoint;
 
 public class DragManager {
 

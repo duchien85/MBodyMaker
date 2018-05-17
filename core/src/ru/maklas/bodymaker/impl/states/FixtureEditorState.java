@@ -19,8 +19,8 @@ import ru.maklas.bodymaker.impl.controllers.BodyEditorController;
 import ru.maklas.bodymaker.impl.controllers.FixtureEditorController;
 import ru.maklas.bodymaker.impl.dev_beans.MShape;
 import ru.maklas.bodymaker.impl.dev_beans.Vec;
-import ru.maklas.bodymaker.impl.save_beans.BodyPoly;
-import ru.maklas.bodymaker.impl.save_beans.NamedPoint;
+import ru.maklas.bodymaker.runtime.save_beans.BodyPoly;
+import ru.maklas.bodymaker.runtime.save_beans.NamedPoint;
 import ru.maklas.mengine.ComponentMapper;
 
 import java.io.IOException;

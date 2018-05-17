@@ -6,12 +6,11 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Json;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.maklas.bodymaker.impl.save_beans.BodyPoly;
-import ru.maklas.bodymaker.impl.save_beans.FixShape;
-import ru.maklas.bodymaker.impl.save_beans.NamedPoint;
+import ru.maklas.bodymaker.runtime.save_beans.BodyPoly;
+import ru.maklas.bodymaker.runtime.save_beans.FixShape;
+import ru.maklas.bodymaker.runtime.save_beans.NamedPoint;
 
 import java.util.Iterator;
 
